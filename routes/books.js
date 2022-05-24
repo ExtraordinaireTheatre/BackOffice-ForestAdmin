@@ -35,6 +35,15 @@ router.post(
           recordToCreate.image = result.secure_url;
           console.log(recordCreator.image);
         }
+        if (recordToCreate.video) {
+          console.log(recordToCreate, "🔥🔥🔥🔥🔥🔥🔥🔥🔥");
+          const result = await cloudinary.uploader.upload_large(
+            recordToCreate.video,
+            { resource_type: "video" }
+          );
+          console.log(result);
+          recordToCreate.video = result.secure_url;
+        }
         console.log(recordToCreate);
         return recordCreator.create(recordToCreate);
       })
