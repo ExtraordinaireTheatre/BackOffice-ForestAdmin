@@ -2,6 +2,7 @@ const express = require("express");
 const {
   PermissionMiddlewareCreator,
   RecordCreator,
+  RecordUpdater,
 } = require("forest-express-mongoose");
 const { books } = require("../models");
 
@@ -26,25 +27,24 @@ router.post(
   permissionMiddlewareCreator.create(),
   (request, response, next) => {
     const recordCreator = new RecordCreator(books);
-
     recordCreator
       .deserialize(request.body)
       .then(async (recordToCreate) => {
         if (recordToCreate.image) {
           const result = await cloudinary.uploader.upload(recordToCreate.image);
           recordToCreate.image = result.secure_url;
-          console.log(recordCreator.image);
+          // console.log(recordCreator.image);
         }
         if (recordToCreate.video) {
-          console.log(recordToCreate, "🔥🔥🔥🔥🔥🔥🔥🔥🔥");
+          // console.log(recordToCreate, "🔥🔥🔥🔥🔥🔥🔥🔥🔥");
           const result = await cloudinary.uploader.upload_large(
             recordToCreate.video,
             { resource_type: "video" }
           );
-          console.log(result);
+          // console.log(result);
           recordToCreate.video = result.secure_url;
         }
-        console.log(recordToCreate);
+        // console.log(recordToCreate);
         return recordCreator.create(recordToCreate);
       })
       .then((record) => recordCreator.serialize(record))
@@ -58,8 +58,31 @@ router.put(
   "/books/:recordId",
   permissionMiddlewareCreator.update(),
   (request, response, next) => {
+    // console.log(request.body);
+    const recordUpdater = new RecordUpdater(books);
+    recordUpdater
+      .deserialize(request.body)
+      .then(async (recordToUpdate) => {
+        if (recordToUpdate.image) {
+          const result = await cloudinary.uploader.upload(recordToUpdate.image);
+          recordToUpdate.image = result.secure_url;
+          console.log(recordToUpdate);
+        }
+        if (recordToUpdate.video) {
+          const result = await cloudinary.uploader.upload_large(
+            recordToUpdate.video,
+            { resource_type: "video" }
+          );
+        }
+        console.log(recordToUpdate);
+
+        return recordUpdater.update(recordToUpdate, request.params.recordId);
+      })
+      .then((record) => recordUpdater.serialize(record))
+      .then((recordSerialized) => response.send(recordSerialized))
+      .catch(next);
+
     // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#update-a-record
-    next();
   }
 );
 

@@ -49,7 +49,7 @@ router.post("/user/signup", async (req, res) => {
 });
 
 router.post("/user/login/", async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   try {
     const goodUser = await users.findOne({ email: req.body.email });
     if (!goodUser) return res.status(401).json("Unauthorized !");
