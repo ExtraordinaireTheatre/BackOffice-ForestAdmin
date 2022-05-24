@@ -49,6 +49,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// import Routes 
+const userRoutes = require("./api/user");
+app.use(userRoutes);
+
+const booksRoutes = require("./api/books");
+app.use(booksRoutes);
+
+const tomeRoutes = require("./api/tome");
+app.use(tomeRoutes);
+
 app.use(jwt({
   secret: process.env.FOREST_AUTH_SECRET,
   credentialsRequired: false,
