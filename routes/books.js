@@ -49,7 +49,28 @@ router.post(
       })
       .then((record) => recordCreator.serialize(record))
       .then((recordSerialized) => response.send(recordSerialized))
-      .catch(next);
+      .catch(next());
+
+    const notifications = async () => {
+      const message = {
+        to: "ExponentPushToken[wSrLxqOa1ay73095Z4MFEQ]",
+        sound: "default",
+        title: "Forest Notification",
+        body: "depuis forest",
+        data: { someData: "test forest 01" },
+      };
+
+      await fetch("https://exp.host/--/api/v2/push/send", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Accept-encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
+      });
+    };
+    notifications();
   }
 );
 
