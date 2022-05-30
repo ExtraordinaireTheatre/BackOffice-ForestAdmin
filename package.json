@@ -6,6 +6,7 @@
     "start": "node ./server.js"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "body-parser": "1.19.0",
     "chalk": "~1.1.3",
     "cloudinary": "^1.30.0",
@@ -20,6 +21,7 @@
     "forest-express-mongoose": "^7.6.0",
     "mongoose": "~5.13.9",
     "morgan": "1.9.1",
+    "node-fetch": "^2.6.1",
     "require-all": "^3.0.0",
     "uid2": "^1.0.0"
   }

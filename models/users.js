@@ -14,7 +14,7 @@ module.exports = (mongoose, Mongoose) => {
       token: String,
       hash: String,
       salt: String,
-      expoPushToken: String,
+      expoToken: String,
       status: Boolean,
     },
     {

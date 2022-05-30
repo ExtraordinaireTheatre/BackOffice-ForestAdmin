@@ -4,17 +4,20 @@
 module.exports = (mongoose, Mongoose) => {
   // This section contains the properties of your model, mapped to your collection's properties.
   // Learn more here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/models/enrich-your-models#declaring-a-new-field-in-a-model
-  const schema = Mongoose.Schema({
-    'ageCategory': String,
-    'title': String,
-    'author': String,
-    'image': String,
-    'description': String,
-    'duration': String,
-    'video': String,
-  }, {
-    timestamps: false,
-  });
+  const schema = Mongoose.Schema(
+    {
+      ageCategory: String,
+      title: String,
+      author: String,
+      image: String,
+      description: String,
+      duration: String,
+      video: String,
+    },
+    {
+      timestamps: false,
+    }
+  );
 
-  return mongoose.model('books', schema, 'books');
+  return mongoose.model("books", schema, "books");
 };
