@@ -24,8 +24,8 @@ const notifications = async (expoToken) => {
   const message = {
     to: expoToken,
     sound: "default",
-    title: "l'extraordinaire Theatre !",
-    body: "l'extraordinaire petit theatre vous propose une nouvelle histoire !",
+    title: "L'extraordinaire Theatre !",
+    body: "L'extraordinaire petit theatre vous propose une nouvelle histoire !",
     // data: { someData: "test forest 10" },
   };
   await fetch("https://exp.host/--/api/v2/push/send", {
@@ -44,9 +44,9 @@ const notificationsUpdate = async (expoToken) => {
   const message = {
     to: expoToken,
     sound: "default",
-    title: `Nouvelle mis a jour conte`,
-    body: "update notification",
-    data: { someData: "test forest 10" },
+    title: `L'extraordinaire Theatre`,
+    body: "De nouvelles mis a jour de contes sont disponible",
+    // data: { someData: "test forest 10" },
   };
   await fetch("https://exp.host/--/api/v2/push/send", {
     method: "post",
