@@ -24,9 +24,9 @@ const notifications = async (expoToken) => {
   const message = {
     to: expoToken,
     sound: "default",
-    title: "New New Forest Notification",
-    body: "w/ bug",
-    data: { someData: "test forest 10" },
+    title: "l'extraordinaire Theatre !",
+    body: "l'extraordinaire petit theatre vous propose une nouvelle histoire !",
+    // data: { someData: "test forest 10" },
   };
   await fetch("https://exp.host/--/api/v2/push/send", {
     method: "post",
