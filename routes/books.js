@@ -121,16 +121,16 @@ router.put(
   permissionMiddlewareCreator.update(),
   (request, response, next) => {
     // console.log(request.body);
-    const fetchUser = async () => {
-      const response = await axios.get("http://localhost:3310/notification");
-      const result = response.data;
+    // const fetchUser = async () => {
+    //   const response = await axios.get("http://localhost:3310/notification");
+    //   const result = response.data;
 
-      result.map((item) => {
-        console.log(item.token);
-        notificationsUpdate(item);
-      });
-    };
-    fetchUser();
+    //   result.map((item) => {
+    //     console.log(item.token);
+    //     notificationsUpdate(item);
+    //   });
+    // };
+    // fetchUser();
     const recordUpdater = new RecordUpdater(books);
     recordUpdater
       .deserialize(request.body)

@@ -34,8 +34,11 @@ router.post("/user/signup", async (req, res) => {
         token: token,
         hash: hash,
         salt: salt,
-        expoToken: req.body.expoToken,
+        // expoToken: req.body.expoToken,
       });
+      if (req.body.expoToken) {
+        newAccount.expoToken = req.body.expoToken;
+      }
 
       console.log(newAccount);
       await newAccount.save();
