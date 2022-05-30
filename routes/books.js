@@ -127,7 +127,7 @@ router.put(
     console.log(request.body);
     const fetchUser = async () => {
       const response = await axios.get(
-        "http://backoffice-forest-admin-sr.herokuapp.com/notification"
+        "https://backoffice-forest-admin-sr.herokuapp.com/notification"
       );
       const result = response.data;
 
