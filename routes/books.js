@@ -71,7 +71,9 @@ router.post(
 
   (request, response, next) => {
     const fetchUser = async () => {
-      const response = await axios.get("http://localhost:3310/notification");
+      const response = await axios.get(
+        "https://backoffice-forest-admin-sr.herokuapp.com/notification"
+      );
       const result = response.data;
 
       console.log(result);
