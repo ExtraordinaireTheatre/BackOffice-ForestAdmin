@@ -12,6 +12,7 @@ module.exports = (mongoose, Mongoose) => {
     'description': String,
     'duration': String,
     'video': String,
+    'timeCode': Array,
   }, {
     timestamps: false,
   });
