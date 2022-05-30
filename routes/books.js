@@ -70,7 +70,7 @@ router.post(
   permissionMiddlewareCreator.create(),
 
   (request, response, next) => {
-    const fetchUser = async () => {
+    const fetchUserForNotificationsAdd = async () => {
       const response = await axios.get(
         "https://backoffice-forest-admin-sr.herokuapp.com/notification"
       );
@@ -85,6 +85,7 @@ router.post(
     };
 
     const recordCreator = new RecordCreator(books);
+
     recordCreator
       .deserialize(request.body)
       .then(async (recordToCreate) => {
@@ -109,7 +110,7 @@ router.post(
 
       .then((record) => recordCreator.serialize(record))
       .then((recordSerialized) => response.send(recordSerialized))
-      .then(fetchUser())
+      .then(fetchUserForNotificationsAdd())
       .catch(next());
   }
 );
@@ -119,7 +120,7 @@ router.put(
   "/books/:recordId",
   permissionMiddlewareCreator.update(),
   (request, response, next) => {
-    const fetchUser = async () => {
+    const fetchUserForNotificationsUpdate = async () => {
       const response = await axios.get(
         "https://backoffice-forest-admin-sr.herokuapp.com/notification"
       );
@@ -149,7 +150,7 @@ router.put(
       })
       .then((record) => recordUpdater.serialize(record))
       .then((recordSerialized) => response.send(recordSerialized))
-      .then(fetchUser())
+      .then(fetchUserForNotificationsUpdate())
       .catch(next);
 
     // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#update-a-record
