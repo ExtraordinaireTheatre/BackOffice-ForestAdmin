@@ -7,6 +7,8 @@ const {
 const { books } = require("../models");
 
 const router = express.Router();
+const axios = require("axios");
+
 const permissionMiddlewareCreator = new PermissionMiddlewareCreator("books");
 
 const cloudinary = require("cloudinary").v2;
@@ -16,6 +18,47 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
+const fetch = require("node-fetch");
+
+const notifications = async (expoToken) => {
+  const message = {
+    to: expoToken,
+    sound: "default",
+    title: "New New Forest Notification",
+    body: "w/ bug",
+    data: { someData: "test forest 10" },
+  };
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "post",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+  // console.log(message);
+};
+
+const notificationsUpdate = async (expoToken) => {
+  const message = {
+    to: expoToken,
+    sound: "default",
+    title: `Nouvelle mis a jour conte`,
+    body: "update notification",
+    data: { someData: "test forest 10" },
+  };
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "post",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+  // console.log(message);
+};
 // This file contains the logic of every route in Forest Admin for the collection books:
 // - Native routes are already generated but can be extended/overriden - Learn how to extend a route here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/extend-a-route
 // - Smart action routes will need to be added as you create new Smart Actions - Learn how to create a Smart Action here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/actions/create-and-manage-smart-actions
@@ -25,7 +68,19 @@ router.post(
   "/books",
 
   permissionMiddlewareCreator.create(),
+
   (request, response, next) => {
+    const fetchUser = async () => {
+      const response = await axios.get("http://localhost:3310/notification");
+      const result = response.data;
+
+      result.map((item) => {
+        console.log(item);
+        notifications(item);
+      });
+    };
+    fetchUser();
+
     const recordCreator = new RecordCreator(books);
     recordCreator
       .deserialize(request.body)
@@ -45,32 +100,18 @@ router.post(
           recordToCreate.video = result.secure_url;
         }
         // console.log(recordToCreate);
+
         return recordCreator.create(recordToCreate);
       })
-      .then((record) => recordCreator.serialize(record))
-      .then((recordSerialized) => response.send(recordSerialized))
+
+      .then((record) => {
+        recordCreator.serialize(record);
+      })
+      .then(() => notifications())
+      .then((recordSerialized) => {
+        response.send(recordSerialized);
+      })
       .catch(next());
-
-    const notifications = async () => {
-      const message = {
-        to: "ExponentPushToken[wSrLxqOa1ay73095Z4MFEQ]",
-        sound: "default",
-        title: "Forest Notification",
-        body: "depuis forest",
-        data: { someData: "test forest 01" },
-      };
-
-      await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Accept-encoding": "gzip, deflate",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(message),
-      });
-    };
-    notifications();
   }
 );
 
@@ -80,6 +121,16 @@ router.put(
   permissionMiddlewareCreator.update(),
   (request, response, next) => {
     // console.log(request.body);
+    const fetchUser = async () => {
+      const response = await axios.get("http://localhost:3310/notification");
+      const result = response.data;
+
+      result.map((item) => {
+        console.log(item.token);
+        notificationsUpdate(item);
+      });
+    };
+    fetchUser();
     const recordUpdater = new RecordUpdater(books);
     recordUpdater
       .deserialize(request.body)
@@ -99,7 +150,9 @@ router.put(
 
         return recordUpdater.update(recordToUpdate, request.params.recordId);
       })
-      .then((record) => recordUpdater.serialize(record))
+      .then((record) => {
+        recordUpdater.serialize(record);
+      })
       .then((recordSerialized) => response.send(recordSerialized))
       .catch(next);
 

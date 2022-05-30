@@ -31,7 +31,13 @@ router.post("/user/signup", async (req, res) => {
         token: token,
         hash: hash,
         salt: salt,
+        // expoToken: req.body.expoToken
       });
+      if (req.body.expoToken) {
+        newAccount.expoToken = req.body.expoToken;
+        console.log(req.body.expoToken);
+      }
+      console.log(newAccount);
       await newAccount.save();
       const ret = {
         _id: newAccount._id,
@@ -73,6 +79,24 @@ router.post("/user/login/", async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: { message: error.message } });
+  }
+});
+
+router.get("/notification", async (req, res) => {
+  try {
+    const listUser = await users.find();
+    // .select("token -_id");
+    const arraySubscribed = [];
+
+    listUser.map((item) => {
+      if (item.token) {
+        arraySubscribed.push(item.token);
+      }
+    });
+
+    res.json(arraySubscribed);
+  } catch (error) {
+    res.json(error.message);
   }
 });
 
