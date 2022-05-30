@@ -22,6 +22,9 @@ router.post("/user/signup", async (req, res) => {
       const salt = uid2(32);
       const hash = SHA256(req.body.password + salt).toString(encBase64);
       const token = uid2(32);
+
+      console.log(req.body.expoToken);
+
       const newAccount = new users({
         email: req.body.email,
         account: {
