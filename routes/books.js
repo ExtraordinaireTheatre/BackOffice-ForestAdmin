@@ -45,7 +45,7 @@ const notificationsUpdate = async (expoToken) => {
     to: expoToken,
     sound: "default",
     title: `L'extraordinaire Theatre`,
-    body: "De nouvelles mis a jour de contes sont disponible",
+    body: "De nouvelles mise à jour de contes sont disponibles",
     // data: { someData: "test forest 10" },
   };
   await fetch("https://exp.host/--/api/v2/push/send", {
@@ -83,7 +83,6 @@ router.post(
         notifications(item);
       });
     };
-    fetchUser();
 
     const recordCreator = new RecordCreator(books);
     recordCreator
@@ -108,13 +107,9 @@ router.post(
         return recordCreator.create(recordToCreate);
       })
 
-      .then((record) => {
-        recordCreator.serialize(record);
-      })
-      .then(() => notifications())
-      .then((recordSerialized) => {
-        response.send(recordSerialized);
-      })
+      .then((record) => recordCreator.serialize(record))
+      .then((recordSerialized) => response.send(recordSerialized))
+      .then(fetchUser())
       .catch(next());
   }
 );
@@ -124,19 +119,15 @@ router.put(
   "/books/:recordId",
   permissionMiddlewareCreator.update(),
   (request, response, next) => {
-    console.log(request.body);
     const fetchUser = async () => {
       const response = await axios.get(
         "https://backoffice-forest-admin-sr.herokuapp.com/notification"
       );
       const result = response.data;
-
       result.map((item) => {
-        console.log(item.token);
         notificationsUpdate(item);
       });
     };
-    fetchUser();
     const recordUpdater = new RecordUpdater(books);
     recordUpdater
       .deserialize(request.body)
@@ -156,10 +147,9 @@ router.put(
 
         return recordUpdater.update(recordToUpdate, request.params.recordId);
       })
-      .then((record) => {
-        recordUpdater.serialize(record);
-      })
+      .then((record) => recordUpdater.serialize(record))
       .then((recordSerialized) => response.send(recordSerialized))
+      .then(fetchUser())
       .catch(next);
 
     // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#update-a-record
