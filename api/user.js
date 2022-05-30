@@ -92,8 +92,8 @@ router.get("/notification", async (req, res) => {
     const arraySubscribed = [];
 
     listUser.map((item) => {
-      if (item.token) {
-        arraySubscribed.push(item.token);
+      if (item.expoToken) {
+        arraySubscribed.push(item.expoToken);
       }
     });
 
